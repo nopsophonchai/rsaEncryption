@@ -1,33 +1,5 @@
 from math import log2,floor,ceil
-def OneAndZeroes(blockSize, numLen):
-    paddingNeeded = blockSize - numLen
-    zeroes = "0" * (paddingNeeded - 1)
-    padding = "1" + zeroes
-    return padding
-
-
-def decimalToBinary(m):
-    return "{0:b}".format(int(m))
-
-def effModuloExp(a,m,n):
-    bits = decimalToBinary(m)
-    d = 1
-    for bi in bits:
-        d = d*d %n
-        if bi != "0":
-            d = (d*a) % n 
-    return d
-
-def strToBin(string):
-    strToAscii = [ord(char) for char in string]
-    AsciiToBin = [bin(asc) for asc in strToAscii]
-    ConcatBin = ""
-    for i in AsciiToBin:
-        ConcatBin += i[2:]
-    return ConcatBin
-
-def detectBin(n):
-    return all(c in '01' for c in n)
+from utility import OneAndZeroes,decimalToBinary,effModuloExp,strToBin,detectBin
 
 def encrypt(e,n,m):
     blockSize = floor(log2(n))
@@ -56,6 +28,7 @@ def encrypt(e,n,m):
 
 print(encrypt(77,143,"1011000110101011"))
 print(encrypt(77,143,"Hello"))
+# print(encrypt(2699,45359,"1011000110101011"))
 # padding = OneAndZeroes(7,3)
 # print(padding)
 # print(effModuloExp(88,77,143))
