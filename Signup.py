@@ -7,15 +7,15 @@ customtkinter.set_default_color_theme("dark-blue")
 
 app = customtkinter.CTk(fg_color='grey')
 app.geometry("600x440")
-app.title('Log in')
+app.title('Sign up')
 
 show_password = tk.BooleanVar()
 show_password.set(False)
-def openanother():
-    app.destroy()
-    SendEmail.MainApp()
-def button_function():
-    openanother()
+#def openanother():
+#    app.destroy()
+#    SendEmail.MainApp()
+#def button_function():
+#    openanother()
     
 def toggle_password_visibility():
     global show_password
@@ -27,7 +27,7 @@ def toggle_password_visibility():
 frame = customtkinter.CTkFrame(master=app, width=320, height=360, corner_radius=15)
 frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-LoginText = customtkinter.CTkLabel(master=frame, text="Log in", font=('Century Gothic', 20))
+LoginText = customtkinter.CTkLabel(master=frame, text="Sign up", font=('Century Gothic', 20))
 LoginText.place(relx=0.5, y=45,anchor=tk.CENTER)
 
 EmailLabel = customtkinter.CTkLabel(master=frame, text="Username:", font=('Century Gothic', 15))
@@ -48,7 +48,7 @@ PWBox.place(x=50, y=175)
 
 #Loginbutton = customtkinter.CTkButton(master=frame, width=220, text="Login", command=button_function, corner_radius=6)
 #Loginbutton.place(x=50, y=240) 
-Loginbutton = tk.Button(master=frame, width=23, height=2, text="Login", font=("Century Gothic", 12), bg="#0097B2", command=button_function)
+Loginbutton = tk.Button(master=frame, width=23, height=2, text="Signup", font=("Century Gothic", 12), bg="#FF5757")
 Loginbutton.place(relx=0.5, y=270, anchor=tk.CENTER)
 
 app.mainloop()
