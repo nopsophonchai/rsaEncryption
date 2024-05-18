@@ -3,8 +3,9 @@ import customtkinter
 from tkinter import scrolledtext
 import SendEmail
 import hashlib
-import encryptor,decryptor
+import encryptor,decryptor,symmetrickeyencrypt
 import random as rd
+from datetime import datetime
 
 Client = ''
 frames = {}
@@ -35,7 +36,7 @@ def clientClick(frameName,client):
     
 def authenticate(d,n,skey,sn,frameName):
     global payLoad
-    print(Client)
+    # print(Client)
     shaObject = hashlib.sha256()
     nonce = f'{rd.randint(1,128)}'
     shaObject.update(nonce.encode('utf-8'))
@@ -77,6 +78,7 @@ def serverAuth(payload):
     with open('authentication.txt','a') as file:
         file.write(f'Server Decrypted: {nonceHash}')
         file.write(f'Received MAC: {mac}')
+   
         
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("dark-blue")
@@ -135,7 +137,7 @@ frames['showAuth'] = showAuthentication
 
 def authLogin():
     #We are simulating the sender side
-    print(sN)
+    # print(sN)
     username = EmailBox.get()
     password = PWBox.get()
     shaOb = hashlib.sha256()
@@ -150,7 +152,7 @@ def authLogin():
         use,passW = file.readlines()[0].strip().split(',')
         use = decryptor.decrypt(sD,sN,use)
         passW = decryptor.decrypt(sD,sN,passW)
-        print(f'{use},{passW}')
+        # print(f'{use},{passW}')
     with open('shadow.txt','r') as file:
         realUse,realPass = file.readlines()[0].strip().split(',')
         
@@ -158,9 +160,11 @@ def authLogin():
             shaOb = hashlib.sha256()
             shaOb.update(realPass.encode('utf-8'))
             realPass = shaOb.hexdigest()
-            print(f'{realUse},{realPass}')
+            # print(f'{realUse},{realPass}')
             if realPass == passW:
-                changeFrame('menu')
+                changeFrame('frame2')
+                
+    
 
 login = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=15)
 login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
@@ -174,26 +178,159 @@ PWLabel = customtkinter.CTkLabel(master=login, text="Password:", font=('Century 
 PWLabel.place(x=50, y=145)
 PWBox = customtkinter.CTkEntry(master=login, width=220, placeholder_text='Password', show="*")
 PWBox.place(x=50, y=175)
-Loginbutton = tk.Button(master=login, width=15, height=5, text="Send Email", font=("Century Gothic", 12), bg="#0097B2",fg="white", command= lambda: authLogin())
+Loginbutton = tk.Button(master=login, width=15, height=5, text="Login", font=("Century Gothic", 12), bg="#0097B2",fg="white", command= lambda: authLogin())
 Loginbutton.place(x=50, y=225, anchor=tk.CENTER)
 
 frames['login'] = login
 
-menu = customtkinter.CTkFrame(master=app, width=320, height=360, corner_radius=15)
-menu.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-#, y=45
-LoginText = customtkinter.CTkLabel(master=menu, text="Welcome", font=('Century Gothic', 30))
-LoginText.place(relx=0.5,rely=0.15, anchor=tk.CENTER)
-Loginbutton = tk.Button(master=menu, width=15, height=5, text="Send Email", font=("Century Gothic", 12), bg="#0097B2",fg="white")
+
+
+def SendEmail():
+    frame2.place_forget()
+    login.place_forget()
+    showAuthentication.place_forget()
+    serverFrame.place_forget()
+    LoginText.place_forget()
+    frame.place_forget()
+    SendMailframe.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+def back_to_main_frame():
+    SendMailframe.place_forget()
+    ViewEmailframe.place_forget()
+    frame2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+def ViewEmail():
+    frame2.place_forget()
+    frame2.place_forget()
+    login.place_forget()
+    showAuthentication.place_forget()
+    serverFrame.place_forget()
+    LoginText.place_forget()
+    frame.place_forget()
+    getMail()
+    ViewEmailframe.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+def sendMail():
+    to = Toentry.get()
+    body = entry44.get("1.0", tk.END)
+    print(body)
+    # print(f"{to} | {body}")
+    sssk = rd.randint(1,100000000)
+    ssskByte = sssk.to_bytes(16, byteorder='big')
+    ssskString = f"{sssk}"
+
+    for i in keys:
+        i = i.strip().split(',')
+        if i[0] == f'{to}':
+            receiverE = int(i[1])
+            receiverN = int(i[2])
+
+    shaOb = hashlib.sha256()
+    shaOb.update(body.encode('utf-8'))
+    digiSig = shaOb.hexdigest()
+    print(digiSig)
+    digiSig = encryptor.encrypt(sD,sN,digiSig)
+
+    bodyEncrypted = symmetrickeyencrypt.encrypt_message(body,ssskByte)
+
+    sssKEncrypted = encryptor.encrypt(receiverE,receiverN,ssskString)
+
+    if to in ['A','B','C']:
+        with open(f'{to}_mailbox.txt','a') as file:
+            file.write(f'{Client},{sssKEncrypted},{digiSig},{bodyEncrypted},{datetime.now().strftime("%Y-%m-%d")}\n')
+    SendMailframe.place_forget()
+    ViewEmailframe.place_forget()
+    frame2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+
+mails = []
+def getMail():
+    global mails
+    with open(f'{Client}_mailbox.txt','r') as file:
+        for i in file.readlines():
+            i = i.strip().split(',')
+            print(i)
+            sender, sssKEncrypted, digiSig, bodyEncrypted, time = i
+            sssk = decryptor.decrypt(myD,myN,sssKEncrypted)
+            body = symmetrickeyencrypt.decrypt_message(bodyEncrypted,int(sssk).to_bytes(16, byteorder='big'))
+            for i in keys:
+                i = i.strip().split(',')
+                if i[0] == f'{sender}':
+                    senderE = int(i[1])
+                    senderN = int(i[2])
+            digiSig = decryptor.decrypt(sE,sN,digiSig)
+            print(digiSig)
+            shaOb = hashlib.sha256()
+            shaOb.update(body.encode('utf-8'))
+            comparator = shaOb.hexdigest()
+            print(comparator)
+            if digiSig == comparator:
+                print('Match')
+                mails.append(f"{sender}\n{body}\n{time}\n----------\n")
+def showMails():
+    frame2.place_forget()
+    login.place_forget()
+    showAuthentication.place_forget()
+    serverFrame.place_forget()
+    LoginText.place_forget()
+    frame.place_forget()
+    getMail()
+    text_box.config(state=tk.NORMAL)  
+    text_box.delete(1.0, tk.END)
+    for mail in mails:
+        text_box.insert(tk.END, mail)
+    text_box.config(state=tk.DISABLED) 
+    ViewEmailframe.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+frame2 = customtkinter.CTkFrame(master=app, width=320, height=360, corner_radius=15)
+frame2.place_forget()
+frame2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+LoginText = customtkinter.CTkLabel(master=frame2, text="Welcome", font=('Century Gothic', 30))
+LoginText.place(relx=0.5, rely=0.15, anchor=tk.CENTER)
+Loginbutton = tk.Button(master=frame2, width=15, height=5, text="Send Email", font=("Century Gothic", 12), bg="#0097B2", fg="white", command=SendEmail)
 Loginbutton.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-
-Signupbutton = tk.Button(master=menu, width=15, height=5, text="View Email", font=("Century Gothic", 12), bg="#FF5757",fg="white")
+Signupbutton = tk.Button(master=frame2, width=15, height=5, text="View Email", font=("Century Gothic", 12), bg="#FF5757", fg="white", command=showMails)
 Signupbutton.place(relx=0.5, rely=0.75, anchor=tk.CENTER)
+frames['frame2'] = frame2 
 
-frames['menu'] = menu
 
+SendMailframe = customtkinter.CTkFrame(master=app, width=320, height=400, corner_radius=15, fg_color='white')
+SendMailframe.place_forget()
+Welcome = customtkinter.CTkLabel(master=SendMailframe, text="Send Email", font=('Century Gothic', 20))
+Welcome.place(x=105, y=25)
+ToLabel = customtkinter.CTkLabel(master=SendMailframe, text="To:", font=('Century Gothic', 15))
+ToLabel.place(x=25, y=80)
+Toentry = customtkinter.CTkEntry(master=SendMailframe, width=200)
+Toentry.place(x=85, y=80)
+Bodylabel = customtkinter.CTkLabel(master=SendMailframe, text="Body:", font=('Century Gothic', 15))
+Bodylabel.place(x=25, y=110)
+entry44 = scrolledtext.ScrolledText(master=SendMailframe, width=25, height=8, font=("Times New Roman", 15))
+entry44.place(x=150, y=170)
+send = tk.Button(master=SendMailframe, width=10, height=1, text="Send", font=("Century Gothic", 12), bg="#0097B2", fg="white",command=lambda:sendMail())
+send.place(x=100, y=380)
+back = tk.Button(master=SendMailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757", fg="white", command=back_to_main_frame)
+back.place(x=260, y=380)
+
+
+
+
+ViewEmailframe = customtkinter.CTkFrame(master=app, width=320, height=400, corner_radius=15, fg_color='white')
+ViewEmailframe.place_forget()
+Welcome = customtkinter.CTkLabel(master=ViewEmailframe, text="My Email", font=('Century Gothic', 20))
+Welcome.place(relx=0.5, y=40, anchor=tk.CENTER)
+
+text_box_frame = customtkinter.CTkFrame(master=ViewEmailframe)
+text_box_frame.pack(pady=20, padx=20)
+scrollbar = tk.Scrollbar(text_box_frame)
+scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+text_box = tk.Text(text_box_frame, height=20, width=50, yscrollcommand=scrollbar.set)
+text_box.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+scrollbar.config(command=text_box.yview)
+
+back = tk.Button(master=ViewEmailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757", fg="white", command=back_to_main_frame)
+back.place(relx=0.5, y=400, anchor=tk.CENTER)
 
 changeFrame("main")
-
 
 app.mainloop()
