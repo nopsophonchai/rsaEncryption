@@ -16,6 +16,6 @@ Bodylabel = customtkinter.CTkLabel(master=SendMailframe, text="Body:", font=('Ce
 Bodylabel.place(x=25, y=110)
 entry44 = scrolledtext.ScrolledText(master=SendMailframe,  width=23, height=8, font=("Century Gothic",15))
 entry44.place(x=25, y=140)
-back = tk.Button(master=SendMailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757")
+back = tk.Button(master=SendMailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757",fg="white")
 back.place(relx=0.5, y=350, anchor=tk.CENTER)
 w.mainloop()

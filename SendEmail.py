@@ -22,11 +22,11 @@ class MainApp:
         entry44.place(x=25, y=140)
         #send = customtkinter.CTkButton(master=SendMailframe, width=130, text="Send", corner_radius=6)
         #send.place(x=25, y=360)
-        send = tk.Button(master=SendMailframe, width=10, height=1, text="Send", font=("Century Gothic", 12), bg="#0097B2")
+        send = tk.Button(master=SendMailframe, width=10, height=1, text="Send", font=("Century Gothic", 12), bg="#0097B2",fg="white")
         send.place(x=25, y=350)
         #clear = customtkinter.CTkButton(master=SendMailframe, width=130, text="Back", corner_radius=6)
         #clear.place(x=158, y=360)
-        send = tk.Button(master=SendMailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757")
+        send = tk.Button(master=SendMailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757",fg="white")
         send.place(x=190, y=350)
         self.w.mainloop()
 if __name__ == "__main__":

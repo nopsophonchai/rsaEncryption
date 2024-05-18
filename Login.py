@@ -48,7 +48,7 @@ PWBox.place(x=50, y=175)
 
 #Loginbutton = customtkinter.CTkButton(master=frame, width=220, text="Login", command=button_function, corner_radius=6)
 #Loginbutton.place(x=50, y=240) 
-Loginbutton = tk.Button(master=frame, width=23, height=2, text="Login", font=("Century Gothic", 12), bg="#0097B2", command=button_function)
+Loginbutton = tk.Button(master=frame, width=23, height=2, text="Login", font=("Century Gothic", 12), bg="#0097B2", command=button_function,fg="white")
 Loginbutton.place(relx=0.5, y=270, anchor=tk.CENTER)
 
 app.mainloop()
