@@ -23,12 +23,12 @@ def decrypt(d,n,m):
         decryptedToBin = deciToBin(decrypted,newBlockSize)
         
         decryptedMsg.append(decryptedToBin)
-    print(decryptedMsg)
+    # print(decryptedMsg)
     decryptedMsg[-1] = removePadding(decryptedMsg[-1])
     decryptedString = ""
     for i in decryptedMsg:
         decryptedString += i
-    print(decryptedString)
+    # print(decryptedString)
     return binaryToString(decryptedString)
 
 
@@ -36,7 +36,7 @@ def decrypt(d,n,m):
 # 01110101110011010111111000000100
 #1011000110101011
 # print(decrypt(53,143,"011110010000011001001001"))
-print(decrypt(53,143,"011011000100000001000011000001010110001100010001"))
+# print(decrypt(53,143,"011011000100000001000011000001010110001100010001"))
 # print(decrypt(7571,45359,"01110101110011010111111000000100"))
 
 

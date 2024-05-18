@@ -1,11 +1,14 @@
 from math import log2,floor,ceil
 from utility import OneAndZeroes,decimalToBinary,effModuloExp,detectBin,stringToBinary,binaryToString,strToBin
+import random as rd
+import hashlib
+from decryptor import decrypt
 
 def encrypt(e,n,m):
     blockSize = floor(log2(n))
     binMsg = m if detectBin(m) else stringToBinary(m)
-    print(len(binMsg))
-    print(binMsg)
+    # print(len(binMsg))
+    # print(binMsg)
 
     
     partitionedMsg = []
@@ -20,7 +23,7 @@ def encrypt(e,n,m):
         # print(len(i))
         encrypted = effModuloExp(i,e,n)
         encryptedToBin = decimalToBinary(encrypted)
-        print(len(encryptedToBin))
+        # print(len(encryptedToBin))
         if len(encryptedToBin) < newBlockSize:
             zeroes = newBlockSize - len(encryptedToBin)
             encryptedToBin = "0"*zeroes+encryptedToBin
@@ -30,13 +33,15 @@ def encrypt(e,n,m):
         encryptedString += i
     return encryptedString
 
-
-
-print(encrypt(77,143,"Hello"))
-# print(encrypt(2699,45359,"1011000110101011"))
-# padding = OneAndZeroes(7,3)
-# print(padding)
-# print(effModuloExp(88,77,143))
-# ConcatBin = strToBin("hello")
-# print(ConcatBin)
-
+# 50467,187741
+shaObject = hashlib.sha256()
+nonce = f'{rd.randint(1,128)}'
+shaObject.update(nonce.encode('utf-8'))
+macText = shaObject.hexdigest()
+macText = encrypt(50467,187741,macText) #We are signing mac with client signature
+# print(macText)
+authChunk = f"{nonce},{macText}"
+print(authChunk)
+authChunk = encrypt(50467,187741,authChunk)
+# print(authChunk)
+print(decrypt(168331,187741,authChunk))
