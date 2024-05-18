@@ -45,10 +45,10 @@ Bodylabel = customtkinter.CTkLabel(master=ViewEmailframe, text="Body:", font=('C
 Bodylabel.place(x=25, y=110)
 
 entry44 = scrolledtext.ScrolledText(master=ViewEmailframe,  width=23, height=8, font=("Century Gothic",15))
-entry44.place(x=25, y=140)
+entry44.place(x=150, y=170)
 
 back = tk.Button(master=ViewEmailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757", fg="white", command=back_to_main_frame)
-back.place(relx=0.5, y=350, anchor=tk.CENTER)
+back.place(relx=0.5, y=400, anchor=tk.CENTER)
 
 
 SendMailframe = customtkinter.CTkFrame(master=app, width=320, height=400, corner_radius=15,fg_color='white')
@@ -67,13 +67,13 @@ Bodylabel = customtkinter.CTkLabel(master=SendMailframe, text="Body:", font=('Ce
 Bodylabel.place(x=25, y=110)
     
 entry44 = scrolledtext.ScrolledText(master=SendMailframe,  width=25, height=8, font=("Times New Roman",15))
-entry44.place(x=25, y=140)
+entry44.place(x=150, y=170)
 
 send = tk.Button(master=SendMailframe, width=10, height=1, text="Send", font=("Century Gothic", 12), bg="#0097B2",fg="white")
-send.place(x=25, y=350)
+send.place(x=100, y=380)
 
 back = tk.Button(master=SendMailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757", fg="white", command=back_to_main_frame)
-back.place(x=190, y=350)
+back.place(x=260, y=380)
 
 
 
