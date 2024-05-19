@@ -108,17 +108,6 @@ def back_to_main_frame():
     ViewEmailframe.place_forget()
     frame2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-#Viewing the emails that was sent
-def ViewEmail():
-    frame2.place_forget()
-    frame2.place_forget()
-    login.place_forget()
-    showAuthentication.place_forget()
-    serverFrame.place_forget()
-    LoginText.place_forget()
-    frame.place_forget()
-    getMail()
-    ViewEmailframe.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 #Sending the mails
 def sendMail():
@@ -186,53 +175,57 @@ def showMails():
     LoginText.place_forget()
     frame.place_forget()
     getMail()
-    text_box.config(state=tk.NORMAL)  
-    text_box.delete(1.0, tk.END)
+    textBox.configure(state=tk.NORMAL)  
+    textBox.delete(1.0, tk.END)
     for mail in mails:
-        text_box.insert(tk.END, mail)
-    text_box.config(state=tk.DISABLED) 
+        textBox.insert(tk.END, mail)
+    textBox.configure(state=tk.DISABLED) 
     ViewEmailframe.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("dark-blue")
 app = customtkinter.CTk(fg_color='grey')
-app.geometry("600x440")
+screenWidth = app.winfo_screenwidth()
+screenHeight = app.winfo_screenheight()
+x = (screenWidth // 2) - (360 // 2)
+y = (screenHeight // 2) - (360 // 2)
+app.geometry(f"360x360+{x}+{y}")
 app.title('Choose your client')
-frame = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=15)
+frame = customtkinter.CTkFrame(master=app, width=360, height=360,fg_color="#FFF0D3")
 frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 frames['main'] = frame
 
-LoginText = customtkinter.CTkLabel(master=frame, text="Email Simulator", font=('Century Gothic', 30))
+LoginText = customtkinter.CTkLabel(master=frame, text="Email Simulator", font=('Century Gothic', 30,'bold'),text_color="#441b07")
 LoginText.place(relx=0.5, y=45, anchor=tk.CENTER)
-EmailLabel = customtkinter.CTkLabel(master=frame, text="Please choose your client", font=('Century Gothic', 20))
+EmailLabel = customtkinter.CTkLabel(master=frame, text="Please choose your client", font=('Century Gothic', 20,'bold'),text_color='#441b07')
 EmailLabel.place(relx=0.5, y=85, anchor=tk.CENTER)
-Abutton = tk.Button(master=frame, width=6, height=1, text="A", font=("Century Gothic", 20), bg="#0097B2",fg="white",command=lambda: clientClick('authentication', "A"))
-Abutton.place(relx=0.2, y=175, anchor=tk.CENTER)
-Bbutton = tk.Button(master=frame, width=6, height=1, text="B", font=("Century Gothic", 20), bg="#FF5757",fg="white",command=lambda: clientClick('authentication', "B"))
-Bbutton.place(relx=0.5, y=175, anchor=tk.CENTER)
-Cbutton = tk.Button(master=frame, width=6, height=1, text="C", font=("Century Gothic", 20), bg="#FF914D",fg="white",command=lambda: clientClick('authentication', "C"))
-Cbutton.place(relx=0.80, y=175, anchor=tk.CENTER)
+Abutton = customtkinter.CTkButton(master=frame, width=120, height=1, text="A", font=("Century Gothic", 20,'bold'), text_color="white",fg_color="#0097B2",command=lambda: clientClick('authentication', "A"))
+Abutton.place(x=60, y=250, anchor=tk.CENTER)
+Bbutton = customtkinter.CTkButton(master=frame, width=120, height=1, text="B", font=("Century Gothic", 20,'bold'), text_color="white",fg_color="#ff5757",command=lambda: clientClick('authentication', "B"))
+Bbutton.place(x=180, y=250, anchor=tk.CENTER)
+Cbutton = customtkinter.CTkButton(master=frame, width=120, height=1, text="C", font=("Century Gothic", 20,'bold'), text_color="white",fg_color="#ff914d",command=lambda: clientClick('authentication', "C"))
+Cbutton.place(x=300, y=250, anchor=tk.CENTER)
 
 
 
 
-serverFrame = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=15)
+serverFrame = customtkinter.CTkFrame(master=app, width=360, height=360, fg_color="#FFF0D3")
 serverFrame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-LoginText = customtkinter.CTkLabel(master=serverFrame, text="Connect to server", font=('Century Gothic', 40))
+LoginText = customtkinter.CTkLabel(master=serverFrame, text="Connect to server", font=('Century Gothic', 20,'bold'),text_color="#441b07")
 LoginText.place(relx=0.5, y=75, anchor=tk.CENTER)
-Abutton = tk.Button(master=serverFrame, width=6, height=1, text="A", font=("Century Gothic", 20), bg="#0097B2",fg="white",command=lambda: authenticate(myD,myN,sE,sN,'showAuth'))
-Abutton.place(relx=0.2, y=175, anchor=tk.CENTER)
+Abutton = customtkinter.CTkButton(master=serverFrame, width=200, height=40, text="Confirm", font=("Century Gothic", 20,'bold'), fg_color="#0097B2", text_color="white", command=lambda: authenticate(myD, myN, sE, sN, 'showAuth'))
+Abutton.place(relx=0.5, y=205, anchor=tk.CENTER)
 
 frames['authentication'] = serverFrame
 
-showAuthentication = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=15)
+showAuthentication = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=0, fg_color="#FFF0D3")
 showAuthentication.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-demoText = customtkinter.CTkLabel(master=showAuthentication, text="Client->Server: Client,{m,{hash(m)}_prClient}_puServer", font=('Century Gothic', 12))
-demoText.place(relx=0.5, y=175, anchor=tk.CENTER)
-Authbutton = tk.Button(master=showAuthentication, width=6, height=1, text="Authenticate", font=("Century Gothic", 20), bg="#0097B2",fg="white",command=lambda: serverAuth(payLoad))
-Authbutton.place(relx=0.2, y=250, anchor=tk.CENTER)
+demoText = customtkinter.CTkLabel(master=showAuthentication, text="Client->Server: Client,{m,{hash(m)}_prClient}_puServer", font=('Century Gothic', 12,'bold'),text_color='#441b07')
+demoText.place(relx=0.5, y=75, anchor=tk.CENTER)
+Authbutton = customtkinter.CTkButton(master=showAuthentication, width=200, height=40, text="Authenticate", font=("Century Gothic", 15,'bold'), text_color="white",fg_color="#ff5757",command=lambda: serverAuth(payLoad))
+Authbutton.place(relx=0.5, y=205, anchor=tk.CENTER)
 
 frames['showAuth'] = showAuthentication
 
@@ -265,71 +258,69 @@ def authLogin():
                 
     
 
-login = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=15)
+login = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=0, fg_color="#FFF0D3")
 login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-LoginText = customtkinter.CTkLabel(master=login, text="Log in", font=('Century Gothic', 20))
+LoginText = customtkinter.CTkLabel(master=login, text="Log in", font=('Century Gothic', 20,'bold'),text_color="#441b07")
 LoginText.place(relx=0.5, y=45,anchor=tk.CENTER)
-EmailLabel = customtkinter.CTkLabel(master=login, text="Username:", font=('Century Gothic', 15))
-EmailLabel.place(x=50, y=80)
+EmailLabel = customtkinter.CTkLabel(master=login, text="Username:", font=('Century Gothic', 15,'bold'),text_color="#441b07")
+EmailLabel.place(relx=0.5, y=90,anchor=tk.CENTER)
 EmailBox = customtkinter.CTkEntry(master=login, width=220, placeholder_text='Username')
-EmailBox.place(x=50, y=110)
-PWLabel = customtkinter.CTkLabel(master=login, text="Password:", font=('Century Gothic', 15))
-PWLabel.place(x=50, y=145)
+EmailBox.place(relx=0.5, y=120,anchor=tk.CENTER)
+PWLabel = customtkinter.CTkLabel(master=login, text="Password:", font=('Century Gothic', 15,'bold'),text_color="#441b07")
+PWLabel.place(relx=0.5, y=155,anchor=tk.CENTER)
 PWBox = customtkinter.CTkEntry(master=login, width=220, placeholder_text='Password', show="*")
-PWBox.place(x=50, y=175)
-Loginbutton = tk.Button(master=login, width=15, height=5, text="Login", font=("Century Gothic", 12), bg="#0097B2",fg="white", command= lambda: authLogin())
-Loginbutton.place(x=50, y=225, anchor=tk.CENTER)
+PWBox.place(relx=0.5, y=185,anchor=tk.CENTER)
+Loginbutton = customtkinter.CTkButton(master=login, width=200, height=40, corner_radius=15,text="Login", font=("Century Gothic", 15,'bold'), fg_color="#ff914d",text_color="white", command= lambda: authLogin())
+Loginbutton.place(relx=0.5, y=250, anchor=tk.CENTER)
 
 frames['login'] = login
 
-frame2 = customtkinter.CTkFrame(master=app, width=320, height=360, corner_radius=15)
-frame2.place_forget()
+frame2 = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=0,fg_color="#FFF0D3")
 frame2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-LoginText = customtkinter.CTkLabel(master=frame2, text="Welcome", font=('Century Gothic', 30))
+LoginText = customtkinter.CTkLabel(master=frame2, text="Welcome", font=('Century Gothic', 30,'bold'),text_color="#441b07")
 LoginText.place(relx=0.5, rely=0.15, anchor=tk.CENTER)
-Loginbutton = tk.Button(master=frame2, width=15, height=5, text="Send Email", font=("Century Gothic", 12), bg="#0097B2", fg="white", command=SendEmail)
+Loginbutton = customtkinter.CTkButton(master=frame2, width=250, height=80, text="Send Email", font=("Century Gothic", 12,'bold'), fg_color="#0097B2", text_color="white", command=SendEmail)
 Loginbutton.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-Signupbutton = tk.Button(master=frame2, width=15, height=5, text="View Email", font=("Century Gothic", 12), bg="#FF5757", fg="white", command=showMails)
-Signupbutton.place(relx=0.5, rely=0.75, anchor=tk.CENTER)
+Signupbutton = customtkinter.CTkButton(master=frame2, width=250, height=80, text="View Email", font=("Century Gothic", 12,'bold'), fg_color="#ff5757", text_color="white", command=showMails)
+Signupbutton.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 frames['frame2'] = frame2 
 
 
-SendMailframe = customtkinter.CTkFrame(master=app, width=320, height=400, corner_radius=15, fg_color='white')
+SendMailframe = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=0, fg_color="#FFF0D3")
 SendMailframe.place_forget()
-Welcome = customtkinter.CTkLabel(master=SendMailframe, text="Send Email", font=('Century Gothic', 20))
-Welcome.place(x=105, y=25)
-ToLabel = customtkinter.CTkLabel(master=SendMailframe, text="To:", font=('Century Gothic', 15))
-ToLabel.place(x=25, y=80)
+Welcome = customtkinter.CTkLabel(master=SendMailframe, text="Send Email", font=('Century Gothic', 20,'bold'),text_color="#441b07")
+Welcome.place(relx=0.5, y=25,anchor=tk.CENTER)
+ToLabel = customtkinter.CTkLabel(master=SendMailframe, text="To:", font=('Century Gothic', 15,'bold'),text_color="#441b07")
+ToLabel.place(relx=0.5, y=50,anchor=tk.CENTER)
 Toentry = customtkinter.CTkEntry(master=SendMailframe, width=200)
-Toentry.place(x=85, y=80)
-Bodylabel = customtkinter.CTkLabel(master=SendMailframe, text="Body:", font=('Century Gothic', 15))
-Bodylabel.place(x=25, y=110)
-entry44 = scrolledtext.ScrolledText(master=SendMailframe, width=25, height=8, font=("Times New Roman", 15))
-entry44.place(x=150, y=170)
-send = tk.Button(master=SendMailframe, width=10, height=1, text="Send", font=("Century Gothic", 12), bg="#0097B2", fg="white",command=lambda:sendMail())
-send.place(x=100, y=380)
-back = tk.Button(master=SendMailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757", fg="white", command=back_to_main_frame)
-back.place(x=260, y=380)
+Toentry.place(relx=0.5, y=75,anchor=tk.CENTER)
+Bodylabel = customtkinter.CTkLabel(master=SendMailframe, text="Body:", font=('Century Gothic', 15,'bold'),text_color="#441b07")
+Bodylabel.place(relx=0.5, y=110,anchor=tk.CENTER)
+entry44 = scrolledtext.ScrolledText(master=SendMailframe, width=40, height=8, font=("Times New Roman", 15))
+entry44.place(relx=0.5, y=200,anchor=tk.CENTER)
+send = customtkinter.CTkButton(master=SendMailframe, width=100, height=30, text="Send", font=("Century Gothic", 12,'bold'), fg_color="#0097B2", text_color="white",command=lambda:sendMail())
+send.place(relx=0.3, y=310,anchor=tk.CENTER)
+back = customtkinter.CTkButton(master=SendMailframe, width=100, height=30, text="Back", font=("Century Gothic", 12,'bold'), fg_color="#FF5757", text_color="white", command=lambda: back_to_main_frame())
+back.place(relx=0.7, y=310,anchor=tk.CENTER)
 
 
 
 
-ViewEmailframe = customtkinter.CTkFrame(master=app, width=320, height=400, corner_radius=15, fg_color='white')
+
+ViewEmailframe = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius=0, fg_color='#FFF0D3')
 ViewEmailframe.place_forget()
-Welcome = customtkinter.CTkLabel(master=ViewEmailframe, text="My Email", font=('Century Gothic', 20))
-Welcome.place(relx=0.5, y=40, anchor=tk.CENTER)
-
-text_box_frame = customtkinter.CTkFrame(master=ViewEmailframe)
-text_box_frame.pack(pady=20, padx=20)
-scrollbar = tk.Scrollbar(text_box_frame)
+ViewEmailframe.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+Welcome = customtkinter.CTkLabel(master=ViewEmailframe, text="My Email", font=('Century Gothic', 20,'bold'),text_color="#441b07")
+Welcome.place(relx=0.5, y=20, anchor=tk.CENTER)
+textBoxFrame = customtkinter.CTkFrame(master=ViewEmailframe,)
+textBoxFrame.place(relx=0.5, rely=0.48, anchor=tk.CENTER)
+scrollbar = tk.Scrollbar(textBoxFrame)
 scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-text_box = tk.Text(text_box_frame, height=20, width=50, yscrollcommand=scrollbar.set)
-text_box.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-
-scrollbar.config(command=text_box.yview)
-
-back = tk.Button(master=ViewEmailframe, width=10, height=1, text="Back", font=("Century Gothic", 12), bg="#FF5757", fg="white", command=back_to_main_frame)
-back.place(relx=0.5, y=400, anchor=tk.CENTER)
+textBox = customtkinter.CTkTextbox(textBoxFrame, yscrollcommand=scrollbar.set, wrap=tk.WORD, width=320, height=260)
+textBox.pack(side=tk.LEFT, fill=tk.BOTH, expand=False)
+scrollbar.config(command=textBox.yview)
+back = customtkinter.CTkButton(master=ViewEmailframe, width=100, height=30, text="Back", font=("Century Gothic", 12, 'bold'), fg_color="#FF5757", text_color="white", command=lambda: back_to_main_frame())
+back.place(relx=0.5, y=330, anchor=tk.CENTER)
 
 changeFrame("main")
 
