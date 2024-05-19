@@ -31,4 +31,4 @@ def decrypt(d,n,m):
     return binaryToString(decryptedString)
 
 
-
+print(decrypt(16529842624347,18320110616131,'011111011001111100011010001011100100110000110'))

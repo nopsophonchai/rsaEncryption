@@ -11,7 +11,7 @@ def encrypt(e,n,m):
         else:
             partitionedMsg.append(binMsg[i:i+blockSize])
     encryptedMsg = []
-    newBlockSize = ceil(log2(n))
+    newBlockSize = ceil(log2(n))      
     for i in partitionedMsg:
         encrypted = effModuloExp(i,e,n)
         encryptedToBin = decimalToBinary(encrypted)
@@ -24,3 +24,4 @@ def encrypt(e,n,m):
         encryptedString += i
     return encryptedString
 
+print(encrypt(18201807221715,18320110616131,'Hello'))
