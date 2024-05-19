@@ -95,6 +95,7 @@ def serverAuth(payload):
 #Redirecting user to sending email page
 def SendEmail():
     frame2.place_forget()
+    ViewEmailframe.place_forget()
     login.place_forget()
     showAuthentication.place_forget()
     serverFrame.place_forget()
@@ -170,6 +171,7 @@ def getMail():
 def showMails():
     frame2.place_forget()
     login.place_forget()
+    
     showAuthentication.place_forget()
     serverFrame.place_forget()
     LoginText.place_forget()
@@ -279,9 +281,9 @@ frame2 = customtkinter.CTkFrame(master=app, width=360, height=360, corner_radius
 frame2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 LoginText = customtkinter.CTkLabel(master=frame2, text="Welcome", font=('Century Gothic', 30,'bold'),text_color="#441b07")
 LoginText.place(relx=0.5, rely=0.15, anchor=tk.CENTER)
-Loginbutton = customtkinter.CTkButton(master=frame2, width=250, height=80, text="Send Email", font=("Century Gothic", 12,'bold'), fg_color="#0097B2", text_color="white", command=SendEmail)
+Loginbutton = customtkinter.CTkButton(master=frame2, width=250, height=80, text="Send Email", font=("Century Gothic", 12,'bold'), fg_color="#0097B2", text_color="white", command=lambda:SendEmail())
 Loginbutton.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-Signupbutton = customtkinter.CTkButton(master=frame2, width=250, height=80, text="View Email", font=("Century Gothic", 12,'bold'), fg_color="#ff5757", text_color="white", command=showMails)
+Signupbutton = customtkinter.CTkButton(master=frame2, width=250, height=80, text="View Email", font=("Century Gothic", 12,'bold'), fg_color="#ff5757", text_color="white", command=lambda:showMails())
 Signupbutton.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 frames['frame2'] = frame2 
 
