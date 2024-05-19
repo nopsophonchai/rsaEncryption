@@ -39,11 +39,3 @@ def decrypt_message(encrypted_message,key):
 
     return decrypted_message.decode('utf-8')
 
-
-message = "YOuo let Mhe ruin it"
-encrypted_message = encrypt_message(message, key)
-print("Encrypted Message:", encrypted_message)
-
-
-decrypted_message = decrypt_message(encrypted_message, key)
-print("Decrypted Message:", decrypted_message)
